@@ -24,18 +24,15 @@ Resources:
             Version: '2012-10-17'
             Statement:
             - Effect: Allow
-              Action:
-              - logs:CreateLogGroup
-              - logs:CreateLogStream
-              - logs:PutLogEvents
+              Action: "*"
               Resource: "*"
 
   FooFunction:
     Type: "AWS::Lambda::Function"
     Properties:
       Code:
-        S3Bucket: dbpoc333
-        S3Key: !Sub FooFunction-latest.zip
+        S3Bucket: "dbpoc333"
+        S3Key: "FooFunction-latest1.zip"
       Description: Lambda function that schedules updates
       Environment:
         Variables:
