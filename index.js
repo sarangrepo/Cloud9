@@ -1,7 +1,7 @@
 'use strict'
 
 exports.handler = async (word, event, context) => {
- word="world";
+ word="India";
  const sent="hello "+word;
  console.log(sent);
  return { statusCode: 200,body: sent };
@@ -9,7 +9,7 @@ exports.handler = async (word, event, context) => {
 exports.lambda_handler = async (event, context, callback) => {
     try 
 {
-	const word="world";
+	const word="India";
         const response = await exports.handler(word, event, context)
         callback(null, response);
     } catch (e) {
