@@ -32,7 +32,7 @@ Resources:
     Properties:
       Code:
         S3Bucket: $BucketName
-        S3ObjectKey: $ObjectName
+        S3Key: $ObjectName
       Description: Lambda function that schedules updates
       Environment:
         Variables:
