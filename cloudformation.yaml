@@ -28,7 +28,7 @@ Resources:
     Properties:
       Code:
         S3Bucket: dbpoc333
-        S3Key: Sarang/lambdacode.zip
+        S3Key: Devops/lambdacode.zip
       Description: Lambda function that schedules updates
       Environment:
         Variables:
