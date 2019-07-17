@@ -1,8 +1,10 @@
 Parameters:
   BucketName:
     Type: String
+    Default: dbpoc333
   ObjectName:
     Type: String
+    Default: Sarang/lambdacode.zip
 Resources:
   FooFunctionRole:
     Type: "AWS::IAM::Role"
