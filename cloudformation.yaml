@@ -31,8 +31,8 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       Code:
-        S3Bucket: $BucketName
-        S3Key: $ObjectName
+        S3Bucket: !Ref BucketName
+        S3Key: !Ref ObjectName
       Description: Lambda function that schedules updates
       Environment:
         Variables:
