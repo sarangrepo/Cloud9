@@ -1,7 +1,7 @@
 'use strict'
 
 exports.handler = async (word, event, context) => {
- word="Honghong";
+ word="Nagpur";
  const sent="hello "+word;
  console.log(sent);
  return { statusCode: 200,body: sent };
