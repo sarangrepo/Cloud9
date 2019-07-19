@@ -1,41 +1,89 @@
-
-Resources:
-  FooFunctionRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          -
-            Effect: "Allow"
-            Principal:
-              Service:
-                - "lambda.amazonaws.com"
-            Action:
-              - "sts:AssumeRole"
-      Policies:
-        -
-          PolicyName: "FooFunctionPolicy"
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-            - Effect: Allow
-              Action: "*"
-              Resource: "*"
-
-  FooFunction:
-    Type: "AWS::Lambda::Function"
-    Properties:
-      Code:
-        S3Bucket: dbpoc333
-        S3Key: Sarang/lambdacode.zip
-      Description: Lambda function that schedules updates
-      Environment:
-        Variables:
-          NODE_ENV: production
-      FunctionName: FooFunction
-      Handler: "index.handler"
-      MemorySize: 128
-      Role: !GetAtt FooFunctionRole.Arn
-      Runtime: "nodejs10.x"
-      Timeout: 100
+Resources: 
+  ApiGatewayRestApi:  
+    Type: AWS::ApiGateway::RestApi  
+    Properties:  
+      ApiKeySourceType: HEADER  
+      Description: An API Gateway with a Lambda Integration  
+      EndpointConfiguration:  
+        Types:  
+          - EDGE  
+      Name: devops-api  
+  
+  ApiGatewayResource:  
+    Type: AWS::ApiGateway::Resource  
+    Properties:  
+      ParentId: !GetAtt ApiGatewayRestApi.RootResourceId 
+      PathPart: 'lambda'  
+      RestApiId: !Ref ApiGatewayRestApi  
+        
+  ApiGatewayMethod:  
+    Type: AWS::ApiGateway::Method  
+    Properties:  
+      ApiKeyRequired: false  
+      AuthorizationType: NONE  
+      HttpMethod: GET  
+      Integration:  
+        ConnectionType: INTERNET  
+        Credentials: !GetAtt ApiGatewayIamRole.Arn  
+        IntegrationHttpMethod: POST  
+        PassthroughBehavior: WHEN_NO_MATCH  
+        TimeoutInMillis: 29000  
+        Type: AWS 
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:776773931318:function:LambdaDevops/invocations'  
+      OperationName: 'lambda'  
+      ResourceId: !Ref ApiGatewayResource  
+      RestApiId: !Ref ApiGatewayRestApi  
+  
+  ApiGatewayModel:  
+    Type: AWS::ApiGateway::Model  
+    Properties:  
+      ContentType: 'application/json'  
+      RestApiId: !Ref ApiGatewayRestApi  
+      Schema: {}  
+  
+  ApiGatewayStage:  
+    Type: AWS::ApiGateway::Stage  
+    Properties:  
+      DeploymentId: !Ref ApiGatewayDeployment  
+      Description: Lambda API Stage v0  
+      RestApiId: !Ref ApiGatewayRestApi  
+      StageName: 'test'  
+  
+  ApiGatewayDeployment:  
+    Type: AWS::ApiGateway::Deployment  
+    DependsOn: ApiGatewayMethod  
+    Properties:  
+      Description: Lambda API Deployment  
+      RestApiId: !Ref ApiGatewayRestApi  
+  
+  ApiGatewayIamRole:  
+    Type: AWS::IAM::Role  
+    Properties:  
+      AssumeRolePolicyDocument:  
+        Version: '2012-10-17'  
+        Statement:  
+          - Sid: ''  
+            Effect: 'Allow'  
+            Principal:  
+              Service:  
+                - 'apigateway.amazonaws.com'  
+            Action:  
+              - 'sts:AssumeRole'  
+      Path: '/'  
+      Policies:  
+        - PolicyName: LambdaAccess  
+          PolicyDocument:  
+            Version: '2012-10-17'  
+            Statement:  
+              - Effect: 'Allow'  
+                Action: 'lambda:*'  
+                Resource: 'arn:aws:lambda:us-east-1:776773931318:function:*' 
+                 
+  Parameter: 
+     Type: "AWS::SSM::Parameter" 
+     Properties:  
+       Name: ApiEndpoint 
+       Description: Api Endpoint 
+       Type: String 
+       Value: !Sub '${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com' 
+        
