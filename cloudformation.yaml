@@ -1,3 +1,7 @@
+Parameters:
+  LambdaArn:
+    Description: Arn of Lambda
+    Type: String
 Resources: 
   ApiGatewayRestApi:  
     Type: AWS::ApiGateway::RestApi  
@@ -29,7 +33,10 @@ Resources:
         PassthroughBehavior: WHEN_NO_MATCH  
         TimeoutInMillis: 29000  
         Type: AWS 
-        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations'  
+        Uri: Name: !Join 
+                      -'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/' 
+                      - !Ref LambdaArn
+                      - '/invocations'  
       OperationName: 'lambda'  
       ResourceId: !Ref ApiGatewayResource  
       RestApiId: !Ref ApiGatewayRestApi  
@@ -77,7 +84,7 @@ Resources:
             Statement:  
               - Effect: 'Allow'  
                 Action: 'lambda:*'  
-                Resource: '${LambdaArn}' 
+                Resource: !Ref LambdaArn 
                  
 Outputs:  
   URLValue: 
