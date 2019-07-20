@@ -2,6 +2,7 @@ Parameters:
   LambdaArn:
     Description: Arn of Lambda
     Type: String
+    Default: 'arn:aws:lambda:us-east-1:776773931318:function:LambdaDevops'
 Resources: 
   ApiGatewayRestApi:  
     Type: AWS::ApiGateway::RestApi  
@@ -34,7 +35,8 @@ Resources:
         TimeoutInMillis: 29000  
         Type: AWS 
         Uri: Name: !Join 
-                      -'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/' 
+                      -""
+                      --'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/' 
                       - !Ref LambdaArn
                       - '/invocations'  
       OperationName: 'lambda'  
