@@ -34,7 +34,7 @@ Resources:
         PassthroughBehavior: WHEN_NO_MATCH  
         TimeoutInMillis: 29000  
         Type: AWS 
-        Uri: Name: !Join 
+        Uri: !Join 
            -''
            --'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/' 
             - !Ref LambdaArn
