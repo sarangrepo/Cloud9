@@ -17,7 +17,7 @@
                         "EDGE"
                     ]
                 },
-                "Name": "devops-apiii"
+                "Name": "newtestapi"
             }
         },
         "ApiGatewayResource": {
