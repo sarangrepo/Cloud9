@@ -22,7 +22,7 @@
         },
         "ApiGatewayResource": {
             "Type": "AWS::ApiGateway::Resource",
-            "DependsOn": "ApiGatewayRestApi"
+            "DependsOn": "ApiGatewayRestApi",
             "Properties": {
                 "ParentId": {
                     "Fn::GetAtt": [
