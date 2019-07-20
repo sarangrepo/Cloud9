@@ -29,7 +29,7 @@ Resources:
         PassthroughBehavior: WHEN_NO_MATCH  
         TimeoutInMillis: 29000  
         Type: AWS 
-        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/#REPLACE/invocations'  
+        Uri: !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaArn}/invocations'  
       OperationName: 'lambda'  
       ResourceId: !Ref ApiGatewayResource  
       RestApiId: !Ref ApiGatewayRestApi  
@@ -77,13 +77,9 @@ Resources:
             Statement:  
               - Effect: 'Allow'  
                 Action: 'lambda:*'  
-                Resource: '#REPLACE' 
+                Resource: '${LambdaArn}' 
                  
-  Parameter: 
-     Type: "AWS::SSM::Parameter" 
-     Properties:  
-       Name: ApiEndpoint 
-       Description: Api Endpoint 
-       Type: String 
-       Value: !Sub '${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com' 
-        
+Outputs:  
+  URLValue: 
+    Description: Api Endpoint 
+    Value: !Sub '${ApiGatewayRestApi}.execute-api.${AWS::Region}.amazonaws.com' 
